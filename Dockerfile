@@ -1,7 +1,7 @@
 FROM golang:latest
 WORKDIR /go/src/github.com/cbi-sh/hashes/
 #RUN go get -d -v golang.org/x/net/html
-COPY main.go .
+COPY ./main.go .
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
 
 FROM alpine:latest

@@ -1,7 +1,7 @@
 FROM golang:latest
 WORKDIR /go/src/github.com/cbi-sh/hashes/
 COPY ./main.go .
-RUN GOOS=linux go build -o main .
+RUN go build -o main .
 
 #FROM alpine:latest
 #COPY --from=0 ./go/src/github.com/cbi-sh/hashes/main .

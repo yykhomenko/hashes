@@ -1,10 +1,10 @@
 version: '3.8'
 services:
-  node:
-    build: ./app
   balancer:
-    build: ./nginx
+    build: balancer
     ports:
       - "80:80"
     depends_on:
       - node
+  node:
+    build: node

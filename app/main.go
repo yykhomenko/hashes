@@ -16,6 +16,6 @@ func main() {
 		fmt.Fprintf(w, "Hi")
 	})
 
-	log.Println("listen http :5000...")
-	log.Fatal(http.ListenAndServe(":5000", nil))
+	log.Println("listen http :80")
+	log.Fatal(http.ListenAndServe(":80", nil))
 }

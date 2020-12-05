@@ -1,6 +1,6 @@
 FROM golang:alpine
 WORKDIR /go/src/github.com/cbi-sh/hashes/
-COPY main.go .
+COPY ./cmd/node/ .
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
 
 FROM scratch

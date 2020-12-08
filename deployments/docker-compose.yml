@@ -5,6 +5,6 @@ services:
     ports:
       - "80:80"
     depends_on:
-      - node
-  node:
-    build: node
+      - hashes
+  hashes:
+    build: hashes

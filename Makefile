@@ -6,10 +6,6 @@ build: ## Build a version
 test: ## Run all the tests
 	go test -v -race -timeout 30s ./...
 
-.PHONY: pull
-pull: ## Pull an image
-	docker pull cbiot/hashes:latest
-
 .PHONY: image
 image: ## Build an image
 	docker build -t cbiot/hashes .
@@ -17,6 +13,14 @@ image: ## Build an image
 .PHONY: publish
 publish: ## Publish an image
 	docker push cbiot/hashes
+
+.PHONY: pull
+pull: ## Pull an image
+	docker pull cbiot/hashes:latest
+
+.PHONY: run
+run: ## Run a container
+	docker run --rm --name=cbiot_hashes -p 80:80 -it cbiot/hashes:latest
 
 .PHONY: help
 help:

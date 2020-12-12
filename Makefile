@@ -1,30 +1,30 @@
-build:						## Build a version
+build: ## Build a version
 	go build -v ./cmd/hashes
 
-test: 						## Run all the tests
+test:	## Run all the tests
 	go test -v -race -timeout 30s ./...
 
-image: 						## Build an image
+image: ## Build an image
 	docker build -t cbiot/hashes .
 
-publish: 					## Publish an image
+publish: ## Publish an image
 	docker push cbiot/hashes
 
-pull: 						## Pull an image
+pull: ## Pull an image
 	docker pull cbiot/hashes:latest
 
-run: 							## Run a container
+run: ## Run a container
 	docker run --rm --name=cbiot_hashes -p 8080:8080 -it cbiot/hashes:latest
 
-deploy: 					## Deploy a container
+deploy: ## Deploy a container
 	kubectl create deployment hashes --image cbiot/hashes:latest
 	kubectl expose deployment hashes --type=LoadBalancer --port=8080
 
-undeploy: 				## Undeploy a container
+undeploy: ## Undeploy a container
 	kubectl delete service hashes
 	kubectl delete deployment hashes
 
-query: 						## Query to container
+query: ## Query to container
 	minikube service hashes
 
 help:

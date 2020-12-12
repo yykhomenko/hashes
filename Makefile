@@ -2,6 +2,14 @@
 build: ## Build a version
 	go build -v ./cmd/hashes
 
+.PHONY: image
+image: ## Build a image
+	docker build -t cbiot/hashes .
+.PHONY: publish-image
+
+publish: ## Publish a image
+	docker push cbiot/hashes
+
 .PHONY: test
 test: ## Run all the tests
 	go test -v -race -timeout 30s ./...

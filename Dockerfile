@@ -4,7 +4,7 @@ WORKDIR /main
 COPY go.mod .
 COPY go.sum .
 RUN go mod download
-COPY . .
+COPY ../.. .
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -v -a -installsuffix cgo -o main ./cmd/hashes
 
 FROM scratch

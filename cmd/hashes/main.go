@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/cbi-sh/hashes/internal/mhs/server"
-	"github.com/cbi-sh/hashes/internal/mhs/store"
+	"github.com/cbi-sh/hashes/internal/hashes/server"
+	"github.com/cbi-sh/hashes/internal/hashes/store"
 )
 
 func main() {

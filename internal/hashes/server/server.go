@@ -9,7 +9,7 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"github.com/cbi-sh/hashes/internal/mhs/store"
+	"github.com/cbi-sh/hashes/internal/hashes/store"
 )
 
 type response struct {

@@ -38,7 +38,7 @@ func (s *server) Start() {
 	r.HandleFunc("/hashes/{msisdn}", s.getHash).Methods("GET")
 	r.HandleFunc("/msisdns/{hash}", s.getMsisdn).Methods("GET")
 
-	log.Fatal(http.ListenAndServe(":80", r))
+	log.Fatal(http.ListenAndServe(":8080", r))
 }
 
 func (s *server) getMetrics(w http.ResponseWriter, _ *http.Request) {

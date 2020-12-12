@@ -20,7 +20,7 @@ pull: ## Pull an image
 
 .PHONY: run
 run: ## Run a container
-	docker run --rm --name=cbiot_hashes -p 80:80 -it cbiot/hashes:latest
+	docker run --rm --name=cbiot_hashes -p 8080:8080 -it cbiot/hashes:latest
 
 .PHONY: help
 help:

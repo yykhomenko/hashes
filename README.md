@@ -2,10 +2,6 @@ docker build -t hashes .
 
 docker run -p 8080:8081 -it hashes
 
-docker-compose build && docker-compose up --scale node=2
+kubectl create deployment hashes --image cbiot/hashes:latest
 
-docker-compose --scale node=10
-
-docker-compose -f deployments/docker-compose.yml up
-
-docker-compose -f deployments/docker-compose.yml down
+kubectl expose deployment hashes --type=LoadBalancer --port=8080

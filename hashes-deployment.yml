@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hashes-deployment
+  labels:
+    app: hashes
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: hashes
+  template:
+    metadata:
+      labels:
+        app: hashes
+    spec:
+      containers:
+        - name: hashes
+          image: cbiot/hashes
+          ports:
+            - containerPort: 8080

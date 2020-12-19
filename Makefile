@@ -7,7 +7,7 @@ test:	## Run all the tests
 image: ## Build an image
 	docker build -t cbiot/hashes .
 
-publish: ## Publish an image
+push: ## Push an image
 	docker push cbiot/hashes
 
 pull: ## Pull an image

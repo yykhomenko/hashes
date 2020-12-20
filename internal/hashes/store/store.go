@@ -16,48 +16,26 @@ const (
 	numberMax = capacity - 1
 )
 
-var ndcs = map[string]int{
-	// "50": 50,
-	// "63": 63,
-	// "66": 66,
-	//
-	"67": 67,
-	// "68": 68,
-	// "73": 73,
-	//
-	// "91": 91,
-	// "92": 92,
-	// "93": 93,
-	//
-	// "94": 94,
-	// "95": 95,
-	// "96": 96,
-	//
-	// "97": 97,
-	// "98": 98,
-	// "99": 99,
-}
-
-var allCapacity = len(ndcs) * capacity
-
 type Store struct {
 	salt string
+	ndcs []int
 	sync.RWMutex
 	msisdns map[[16]byte]uint32
 }
 
-func New(salt string) *Store {
+func New(ndcs []int, salt string) *Store {
 	return &Store{
 		salt:    salt,
-		msisdns: make(map[[16]byte]uint32, allCapacity),
+		ndcs:    ndcs,
+		msisdns: make(map[[16]byte]uint32, len(ndcs)*capacity),
 	}
 }
 
 func (s *Store) Generate() *Store {
-	log.Printf("generate %d hashes...", allCapacity)
+	log.Printf("generate %d hashes...", len(s.ndcs)*capacity)
 	defer timeTrack(time.Now(), "generate")
 
-	for _, ndc := range ndcs {
+	for _, ndc := range s.ndcs {
 		s.generate(ndc)
 	}
 
@@ -114,8 +92,7 @@ func (s *Store) AddHash(number int) {
 }
 
 func timeTrack(start time.Time, name string) {
-	elapsed := time.Since(start)
-	log.Printf("%s took %s", name, elapsed)
+	log.Printf("%s took %s", name, time.Since(start))
 }
 
 func fromHex(hash string) [16]byte {

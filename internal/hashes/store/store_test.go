@@ -8,11 +8,14 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-const number = 670001122
-const hash = "ecd6250df6a523b6e4457f09cd2696af"
+const (
+	number = 670001122
+	hash   = "ecd6250df6a523b6e4457f09cd2696af"
+	salt   = "mySalt"
+)
 
 func TestHash(t *testing.T) {
-	s := New()
+	s := New(salt)
 
 	expected := hash
 	actual := s.Hash(strconv.Itoa(number))
@@ -21,7 +24,7 @@ func TestHash(t *testing.T) {
 }
 
 func TestMsisdn(t *testing.T) {
-	s := New()
+	s := New(salt)
 	s.AddHash(number)
 
 	expected := strconv.Itoa(number)
@@ -31,7 +34,7 @@ func TestMsisdn(t *testing.T) {
 }
 
 func BenchmarkHash(b *testing.B) {
-	s := New()
+	s := New(salt)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		s.Hash(strconv.Itoa(number))

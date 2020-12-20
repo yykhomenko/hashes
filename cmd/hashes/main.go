@@ -10,12 +10,16 @@ import (
 )
 
 func main() {
-	salt := os.Getenv("HASHES_SALT")
-	salt = strings.TrimSpace(salt)
-	if salt == "" {
-		log.Println("env HASHES_SALT is not set, used: mySalt")
-	}
-
+	salt := getEnv("HASHES_SALT", "changeMeSalt")
 	st := store.New(salt).Generate()
 	server.New(st).Start()
+}
+
+func getEnv(key, fallback string) string {
+	value, exists := os.LookupEnv(key)
+	if !exists {
+		log.Printf("env %q is not set, used: %q", key, fallback)
+		return fallback
+	}
+	return strings.TrimSpace(value)
 }

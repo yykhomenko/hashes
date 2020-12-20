@@ -1,3 +1,15 @@
+NAME   := cbiot/hashes
+TAG    := $$(git log -1 --pretty=%!H(MISSING))
+IMG    := ${NAME}:${TAG}
+LATEST := ${NAME}:latest
+
+ORG    := cbiot
+NAME   := hashes
+REPO   := ${ORG}/${NAME}
+TAG    := $(shell git log -1 --pretty=format:"%h")
+IMG    := ${REPO}:${TAG}
+LATEST := ${REPO}:latest
+
 build: ## Build a version
 	go build -v ./cmd/...
 
@@ -5,10 +17,11 @@ test:	## Run all the tests
 	go test -v -race -timeout 30s ./...
 
 image: ## Build an image
-	docker build -t cbiot/hashes .
+	docker build -t ${IMG} .
+	docker tag ${IMG} ${LATEST}
 
 publish: ## Publish an image
-	docker push cbiot/hashes
+	docker push ${IMG}
 
 deploy: ## Deploy a container
 	kubectl apply -f hashes-deployment.yml

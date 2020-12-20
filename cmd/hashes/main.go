@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/cbi-sh/hashes/internal/hashes/server"
@@ -10,8 +11,9 @@ import (
 )
 
 func main() {
+	ndcs := parseNdcs(getEnv("HASHES_NDCS", "50"), ",")
 	salt := getEnv("HASHES_SALT", "changeMeSalt")
-	st := store.New(salt).Generate()
+	st := store.New(ndcs, salt).Generate()
 	server.New(st).Start()
 }
 
@@ -22,4 +24,15 @@ func getEnv(key, fallback string) string {
 		return fallback
 	}
 	return strings.TrimSpace(value)
+}
+
+func parseNdcs(value string, sep string) (ndcs []int) {
+	for _, ndc := range strings.Split(value, sep) {
+		n, err := strconv.Atoi(ndc)
+		if err != nil {
+			log.Fatalf("parseNdcs: %v\n", err)
+		}
+		ndcs = append(ndcs, n)
+	}
+	return
 }

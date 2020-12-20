@@ -53,10 +53,8 @@ func (s *server) getMsisdn(w http.ResponseWriter, r *http.Request) {
 
 	hash := mux.Vars(r)["hash"]
 	if msisdn, ok := s.store.Msisdn(hash); !ok {
-
 		w.WriteHeader(http.StatusNotFound)
 		_ = json.NewEncoder(w).Encode(response{ErrorId: 1, ErrorMsg: "Not found"})
-
 	} else {
 		_ = json.NewEncoder(w).Encode(response{Value: "380" + msisdn})
 	}
@@ -69,21 +67,18 @@ func (s *server) getHash(w http.ResponseWriter, r *http.Request) {
 	msisdn := mux.Vars(r)["msisdn"]
 
 	if !s.store.ValidateMsisdnLen(msisdn) {
-
 		w.WriteHeader(http.StatusBadRequest)
 		_ = json.NewEncoder(w).Encode(response{ErrorId: 2, ErrorMsg: "Not supported msisdn format: " + msisdn})
 		return
 	}
 
 	if cc, ok := s.store.ValidateCC(msisdn); !ok {
-
 		w.WriteHeader(http.StatusBadRequest)
 		_ = json.NewEncoder(w).Encode(response{ErrorId: 3, ErrorMsg: "Not supported cc: " + cc})
 		return
 	}
 
 	if ndc, ok := s.store.ValidateNDC(msisdn); !ok {
-
 		w.WriteHeader(http.StatusBadRequest)
 		_ = json.NewEncoder(w).Encode(response{ErrorId: 4, ErrorMsg: "Not supported ndc: " + ndc})
 		return

@@ -14,7 +14,6 @@ const (
 	capacity  = 1000000
 	numberMin = capacity - capacity
 	numberMax = capacity - 1
-	salt      = "mySalt"
 )
 
 var ndcs = map[string]int{
@@ -42,12 +41,14 @@ var ndcs = map[string]int{
 var allCapacity = len(ndcs) * capacity
 
 type Store struct {
+	salt string
 	sync.RWMutex
 	msisdns map[[16]byte]uint32
 }
 
-func New() *Store {
+func New(salt string) *Store {
 	return &Store{
+		salt:    salt,
 		msisdns: make(map[[16]byte]uint32, allCapacity),
 	}
 }
@@ -57,13 +58,13 @@ func (s *Store) Generate() *Store {
 	defer timeTrack(time.Now(), "generate")
 
 	for _, ndc := range ndcs {
-		generate(s, ndc)
+		s.generate(ndc)
 	}
 
 	return s
 }
 
-func generate(s *Store, ndc int) {
+func (s *Store) generate(ndc int) {
 	min := ndc*capacity + numberMin
 	max := ndc*capacity + numberMax
 
@@ -82,7 +83,7 @@ func generate(s *Store, ndc int) {
 		go func() {
 			defer wg.Done()
 			for number := range numbers {
-				hash := md5.Sum([]byte(strconv.Itoa(number) + salt))
+				hash := md5.Sum([]byte(strconv.Itoa(number) + s.salt))
 				s.Lock()
 				s.msisdns[hash] = uint32(number)
 				s.Unlock()
@@ -93,7 +94,7 @@ func generate(s *Store, ndc int) {
 }
 
 func (s *Store) Hash(msisdn string) string {
-	sum := md5.Sum([]byte(msisdn + salt))
+	sum := md5.Sum([]byte(msisdn + s.salt))
 	return hex.EncodeToString(sum[:])
 }
 
@@ -108,7 +109,7 @@ func (s *Store) Msisdn(hash string) (string, bool) {
 }
 
 func (s *Store) AddHash(number int) {
-	hash := md5.Sum([]byte(strconv.Itoa(number) + salt))
+	hash := md5.Sum([]byte(strconv.Itoa(number) + s.salt))
 	s.msisdns[hash] = uint32(number)
 }
 

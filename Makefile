@@ -10,12 +10,6 @@ image: ## Build an image
 publish: ## Publish an image
 	docker push cbiot/hashes
 
-pull: ## Pull an image
-	docker pull cbiot/hashes:latest
-
-run: ## Run a container
-	docker run --rm --name=cbiot_hashes -p 8080:8080 -it cbiot/hashes:latest
-
 deploy: ## Deploy a container
 	kubectl apply -f hashes-deployment.yml
 	kubectl apply -f hashes-service.yml

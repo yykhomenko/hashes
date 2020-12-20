@@ -12,19 +12,17 @@ test:	## Run all the tests
 	go test -v -race -timeout 30s ./...
 
 image: ## Build an image
-	docker build -t ${IMG} .
-	docker tag ${IMG} ${LATEST}
+	docker build -t ${IMG} -t ${LATEST} .
 
 publish: ## Publish an image
 	docker push ${IMG}
+	docker push ${LATEST}
 
-deploy: ## Deploy a container
-	kubectl apply -f hashes-deployment.yml
-	kubectl apply -f hashes-service.yml
+deploy: ## Deploy to k8s cluster
+	kubectl apply -f deployments
 
-undeploy: ## Undeploy a container
-	kubectl delete -f hashes-deployment.yml
-	kubectl delete -f hashes-service.yml
+undeploy: ## Undeploy from k8s cluster
+	kubectl delete -f deployments
 
 show: ## Show a service
 	minikube service hashes-service

@@ -16,9 +16,12 @@ spec:
     spec:
       containers:
         - name: hashes
-          image: cbiot/hashes
+          image: cbiot/hashes:latest
           ports:
             - containerPort: 8080
+          envFrom:
+            - secretRef:
+                name: hashes-secret
           readinessProbe:
             httpGet:
               path: /metrics

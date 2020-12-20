@@ -1,8 +1,3 @@
-NAME   := cbiot/hashes
-TAG    := $$(git log -1 --pretty=%!H(MISSING))
-IMG    := ${NAME}:${TAG}
-LATEST := ${NAME}:latest
-
 ORG    := cbiot
 NAME   := hashes
 REPO   := ${ORG}/${NAME}

@@ -20,6 +20,8 @@ spec:
           ports:
             - containerPort: 8080
           envFrom:
+            - configMapRef:
+                name: hashes-configmap
             - secretRef:
                 name: hashes-secret
           readinessProbe:

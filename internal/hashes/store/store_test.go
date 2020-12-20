@@ -14,8 +14,10 @@ const (
 	salt   = "mySalt"
 )
 
+var ndcs = []int{67}
+
 func TestHash(t *testing.T) {
-	s := New(salt)
+	s := New(ndcs, salt)
 
 	expected := hash
 	actual := s.Hash(strconv.Itoa(number))
@@ -24,7 +26,7 @@ func TestHash(t *testing.T) {
 }
 
 func TestMsisdn(t *testing.T) {
-	s := New(salt)
+	s := New(ndcs, salt)
 	s.AddHash(number)
 
 	expected := strconv.Itoa(number)
@@ -34,7 +36,7 @@ func TestMsisdn(t *testing.T) {
 }
 
 func BenchmarkHash(b *testing.B) {
-	s := New(salt)
+	s := New(ndcs, salt)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		s.Hash(strconv.Itoa(number))

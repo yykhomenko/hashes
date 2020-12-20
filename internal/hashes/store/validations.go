@@ -1,5 +1,10 @@
 package store
 
+import (
+	"log"
+	"strconv"
+)
+
 func (s *Store) ValidateMsisdnLen(msisdn string) bool {
 	l := len(msisdn)
 	return 12 <= l && l <= 21
@@ -14,7 +19,18 @@ func (s *Store) ValidateCC(msisdn string) (string, bool) {
 }
 
 func (s *Store) ValidateNDC(msisdn string) (string, bool) {
-	ndc := msisdn[3:5]
-	_, ok := ndcs[ndc]
-	return ndc, ok
+	ndcStr := msisdn[3:5]
+
+	ndc, err := strconv.Atoi(ndcStr)
+	if err != nil {
+		log.Println(err)
+	}
+
+	for _, n := range s.ndcs {
+		if ndc == n {
+			return ndcStr, true
+		}
+	}
+
+	return ndcStr, false
 }

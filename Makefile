@@ -1,5 +1,5 @@
 build: ## Build a version
-	go build -v ./cmd/hashes
+	go build -v ./cmd/...
 
 test:	## Run all the tests
 	go test -v -race -timeout 30s ./...
@@ -7,7 +7,7 @@ test:	## Run all the tests
 image: ## Build an image
 	docker build -t cbiot/hashes .
 
-push: ## Push an image
+publish: ## Publish an image
 	docker push cbiot/hashes
 
 pull: ## Pull an image

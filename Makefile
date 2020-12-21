@@ -25,6 +25,7 @@ publish: ## Publish an image
 	docker push ${LATEST}
 
 deploy: ## Deploy to k8s cluster
+	kubectl apply -f deployments/hashes-namespace.yml
 	kubectl apply -f deployments
 
 undeploy: ## Undeploy from k8s cluster

@@ -12,8 +12,13 @@ import (
 
 func main() {
 	ndcs := parseNdcs(getEnv("HASHES_NDCS", "50"), ",")
+	capacity, err := strconv.Atoi(getEnv("HASHES_CAPACITY", "1000000"))
+	if err != nil {
+		log.Fatalf("HASHES_CAPACITY: %v\n", err)
+	}
 	salt := getEnv("HASHES_SALT", "changeMeSalt")
-	st := store.New(ndcs, salt).Generate()
+
+	st := store.New(ndcs, capacity, salt).Generate()
 	server.New(st).Start()
 }
 

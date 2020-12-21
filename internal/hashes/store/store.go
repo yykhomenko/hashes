@@ -10,20 +10,15 @@ import (
 	"time"
 )
 
-const (
-	capacity  = 1000000
-	numberMin = capacity - capacity
-	numberMax = capacity - 1
-)
-
 type Store struct {
-	salt string
-	ndcs []int
+	ndcs     []int
+	capacity int
+	salt     string
 	sync.RWMutex
 	msisdns map[[16]byte]uint32
 }
 
-func New(ndcs []int, salt string) *Store {
+func New(ndcs []int, capacity int, salt string) *Store {
 	return &Store{
 		salt:    salt,
 		ndcs:    ndcs,
@@ -32,7 +27,7 @@ func New(ndcs []int, salt string) *Store {
 }
 
 func (s *Store) Generate() *Store {
-	log.Printf("generate %d hashes...", len(s.ndcs)*capacity)
+	log.Printf("generate %d hashes...", len(s.ndcs)*s.capacity)
 	defer timeTrack(time.Now(), "generate")
 
 	for _, ndc := range s.ndcs {
@@ -43,8 +38,8 @@ func (s *Store) Generate() *Store {
 }
 
 func (s *Store) generate(ndc int) {
-	min := ndc*capacity + numberMin
-	max := ndc*capacity + numberMax
+	min := ndc*s.capacity + 0
+	max := ndc*s.capacity + s.capacity - 1
 
 	var workers = runtime.GOMAXPROCS(-1)
 	numbers := make(chan int, 10*workers)

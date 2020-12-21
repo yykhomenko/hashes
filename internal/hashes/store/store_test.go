@@ -9,15 +9,16 @@ import (
 )
 
 const (
-	number = 670001122
-	hash   = "ecd6250df6a523b6e4457f09cd2696af"
-	salt   = "mySalt"
+	number   = 670001122
+	hash     = "ecd6250df6a523b6e4457f09cd2696af"
+	salt     = "mySalt"
+	capacity = 1000000
 )
 
 var ndcs = []int{67}
 
 func TestHash(t *testing.T) {
-	s := New(ndcs, salt)
+	s := New(ndcs, capacity, salt)
 
 	expected := hash
 	actual := s.Hash(strconv.Itoa(number))
@@ -26,7 +27,7 @@ func TestHash(t *testing.T) {
 }
 
 func TestMsisdn(t *testing.T) {
-	s := New(ndcs, salt)
+	s := New(ndcs, capacity, salt)
 	s.AddHash(number)
 
 	expected := strconv.Itoa(number)
@@ -36,7 +37,7 @@ func TestMsisdn(t *testing.T) {
 }
 
 func BenchmarkHash(b *testing.B) {
-	s := New(ndcs, salt)
+	s := New(ndcs, capacity, salt)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		s.Hash(strconv.Itoa(number))

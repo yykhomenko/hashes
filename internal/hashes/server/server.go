@@ -14,24 +14,24 @@ import (
 
 type response struct {
 	Value    string `json:"value,omitempty"`
-	ErrorId  byte   `json:"errorId,omitempty"`
+	ErrorID  byte   `json:"errorID,omitempty"`
 	ErrorMsg string `json:"errorMsg,omitempty"`
 }
 
-type server struct {
+type Server struct {
 	counter *Counter
 	store   *store.Store
 }
 
-func New(s *store.Store) *server {
-	return &server{
+func New(s *store.Store) *Server {
+	return &Server{
 		store:   s,
 		counter: &Counter{},
 	}
 }
 
-func (s *server) Start() {
-	log.Println("http-server listening...")
+func (s *Server) Start() {
+	log.Println("http-Server listening...")
 
 	r := mux.NewRouter()
 	r.HandleFunc("/metrics", s.getMetrics).Methods("GET")
@@ -41,26 +41,26 @@ func (s *server) Start() {
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
 
-func (s *server) getMetrics(w http.ResponseWriter, _ *http.Request) {
+func (s *Server) getMetrics(w http.ResponseWriter, _ *http.Request) {
 	_, _ = fmt.Fprint(w,
 		"hashes_total ", s.counter.hashes, "\n",
 		"msisdns_total ", s.counter.msisdns)
 }
 
-func (s *server) getMsisdn(w http.ResponseWriter, r *http.Request) {
+func (s *Server) getMsisdn(w http.ResponseWriter, r *http.Request) {
 	atomic.AddUint64(&s.counter.msisdns, 1)
 	w.Header().Set("Content-Type", "application/json")
 
 	hash := mux.Vars(r)["hash"]
 	if msisdn, ok := s.store.Msisdn(hash); !ok {
 		w.WriteHeader(http.StatusNotFound)
-		_ = json.NewEncoder(w).Encode(response{ErrorId: 1, ErrorMsg: "Not found"})
+		_ = json.NewEncoder(w).Encode(response{ErrorID: 1, ErrorMsg: "Not found"})
 	} else {
 		_ = json.NewEncoder(w).Encode(response{Value: "380" + msisdn})
 	}
 }
 
-func (s *server) getHash(w http.ResponseWriter, r *http.Request) {
+func (s *Server) getHash(w http.ResponseWriter, r *http.Request) {
 	atomic.AddUint64(&s.counter.hashes, 1)
 	w.Header().Set("Content-Type", "application/json")
 
@@ -68,19 +68,19 @@ func (s *server) getHash(w http.ResponseWriter, r *http.Request) {
 
 	if !s.store.ValidateMsisdnLen(msisdn) {
 		w.WriteHeader(http.StatusBadRequest)
-		_ = json.NewEncoder(w).Encode(response{ErrorId: 2, ErrorMsg: "Not supported msisdn format: " + msisdn})
+		_ = json.NewEncoder(w).Encode(response{ErrorID: 2, ErrorMsg: "Not supported msisdn format: " + msisdn})
 		return
 	}
 
 	if cc, ok := s.store.ValidateCC(msisdn); !ok {
 		w.WriteHeader(http.StatusBadRequest)
-		_ = json.NewEncoder(w).Encode(response{ErrorId: 3, ErrorMsg: "Not supported cc: " + cc})
+		_ = json.NewEncoder(w).Encode(response{ErrorID: 3, ErrorMsg: "Not supported cc: " + cc})
 		return
 	}
 
 	if ndc, ok := s.store.ValidateNDC(msisdn); !ok {
 		w.WriteHeader(http.StatusBadRequest)
-		_ = json.NewEncoder(w).Encode(response{ErrorId: 4, ErrorMsg: "Not supported ndc: " + ndc})
+		_ = json.NewEncoder(w).Encode(response{ErrorID: 4, ErrorMsg: "Not supported ndc: " + ndc})
 		return
 	}
 

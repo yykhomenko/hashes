@@ -4,3 +4,4 @@ metadata:
   name: hashes-configmap
 data:
   HASHES_NDCS: "67"
+  HASHES_NDC_CAPACITY: "1000000"

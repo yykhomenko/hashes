@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: hashes
-          image: cbiot/hashes:latest
+          image: yykhomenko/hashes:latest
           ports:
             - containerPort: 8080
           envFrom:

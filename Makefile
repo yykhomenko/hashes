@@ -1,4 +1,4 @@
-ORG    := cbiot
+ORG    := yykhomenko
 NAME   := hashes
 REPO   := ${ORG}/${NAME}
 TAG    := $(shell git log -1 --pretty=format:"%h")

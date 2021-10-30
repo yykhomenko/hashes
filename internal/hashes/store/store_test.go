@@ -9,8 +9,8 @@ import (
 )
 
 const (
-	number   = 670001122
-	hash     = "ecd6250df6a523b6e4457f09cd2696af"
+	number   = 500000001
+	hash     = "89c664c54118ca2b4e803a6fc58f670d"
 	salt     = "mySalt"
 	capacity = 1000000
 )

@@ -74,12 +74,14 @@ func (s *Store) Hash(msisdn string) string {
 
 func (s *Store) Msisdn(hash string) (string, bool) {
 	s.RLock()
-	if m, ok := s.msisdns[fromHex(hash)]; ok {
+	h := fromHex(hash)
+	if m, ok := s.msisdns[h]; ok {
 		s.RUnlock()
 		return strconv.Itoa(int(m)), true
 	}
 	s.RUnlock()
 	return "", false
+	// return "500000001", true
 }
 
 func (s *Store) AddHash(number int) {

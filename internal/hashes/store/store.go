@@ -81,7 +81,6 @@ func (s *Store) Msisdn(hash string) (string, bool) {
 	}
 	s.RUnlock()
 	return "", false
-	// return "500000001", true
 }
 
 func (s *Store) AddHash(number int) {

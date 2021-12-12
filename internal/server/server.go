@@ -22,6 +22,7 @@ type Server struct {
 
 func New(c *config.Config, s *store.Store) *Server {
 	return &Server{
+		config:  c,
 		store:   s,
 		counter: &counter{},
 	}

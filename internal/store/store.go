@@ -8,30 +8,28 @@ import (
 	"strconv"
 	"sync"
 	"time"
+
+	"github.com/yykhomenko/hashes/internal/config"
 )
 
 type Store struct {
-	ndcs   []int
-	ndcCap int
-	salt   string
+	config *config.Config
 	sync.RWMutex
 	msisdns map[[16]byte]uint32
 }
 
-func New(ndcs []int, ndcCap int, salt string) *Store {
+func New(config *config.Config) *Store {
 	return &Store{
-		ndcs:    ndcs,
-		ndcCap:  ndcCap,
-		salt:    salt,
-		msisdns: make(map[[16]byte]uint32, len(ndcs)*ndcCap),
+		config:  config,
+		msisdns: make(map[[16]byte]uint32, len(config.NDCS)*config.NDCCap),
 	}
 }
 
 func (s *Store) Generate() *Store {
-	log.Printf("generate %d hashes...", len(s.ndcs)*s.ndcCap)
+	log.Printf("generate %d hashes...", len(s.config.NDCS)*s.config.NDCCap)
 	defer timeTrack(time.Now(), "generate")
 
-	for _, ndc := range s.ndcs {
+	for _, ndc := range s.config.NDCS {
 		s.generate(ndc)
 	}
 
@@ -39,8 +37,8 @@ func (s *Store) Generate() *Store {
 }
 
 func (s *Store) generate(ndc int) {
-	min := ndc*s.ndcCap + 0
-	max := ndc*s.ndcCap + s.ndcCap - 1
+	min := ndc*s.config.NDCCap + 0
+	max := ndc*s.config.NDCCap + s.config.NDCCap - 1
 
 	var workers = runtime.GOMAXPROCS(-1)
 	numbers := make(chan int, 10*workers)
@@ -57,7 +55,7 @@ func (s *Store) generate(ndc int) {
 		go func() {
 			defer wg.Done()
 			for number := range numbers {
-				hash := md5.Sum([]byte(strconv.Itoa(number) + s.salt))
+				hash := md5.Sum([]byte(strconv.Itoa(number) + s.config.Salt))
 				s.Lock()
 				s.msisdns[hash] = uint32(number)
 				s.Unlock()
@@ -68,7 +66,7 @@ func (s *Store) generate(ndc int) {
 }
 
 func (s *Store) Hash(msisdn string) string {
-	sum := md5.Sum([]byte(msisdn + s.salt))
+	sum := md5.Sum([]byte(msisdn + s.config.Salt))
 	return hex.EncodeToString(sum[:])
 }
 
@@ -84,7 +82,7 @@ func (s *Store) Msisdn(hash string) (string, bool) {
 }
 
 func (s *Store) AddHash(number int) {
-	hash := md5.Sum([]byte(strconv.Itoa(number) + s.salt))
+	hash := md5.Sum([]byte(strconv.Itoa(number) + s.config.Salt))
 	s.msisdns[hash] = uint32(number)
 }
 

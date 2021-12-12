@@ -8,8 +8,8 @@ import (
 
 func main() {
 	config := config.New()
-	store := store.New(config.NDCS, config.NDCCap, config.Salt)
+	store := store.New(config)
 	store.Generate()
-	server := server.New(store)
+	server := server.New(config, store)
 	server.Start()
 }

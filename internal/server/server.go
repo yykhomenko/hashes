@@ -8,7 +8,7 @@ import (
 	"sync/atomic"
 
 	"github.com/gorilla/mux"
-
+	"github.com/yykhomenko/hashes/internal/config"
 	"github.com/yykhomenko/hashes/internal/store"
 )
 
@@ -19,14 +19,15 @@ type response struct {
 }
 
 type Server struct {
-	counter *Counter
+	counter *counter
+	config  *config.Config
 	store   *store.Store
 }
 
-func New(s *store.Store) *Server {
+func New(c *config.Config, s *store.Store) *Server {
 	return &Server{
 		store:   s,
-		counter: &Counter{},
+		counter: &counter{},
 	}
 }
 
@@ -66,19 +67,19 @@ func (s *Server) getHash(w http.ResponseWriter, r *http.Request) {
 
 	msisdn := mux.Vars(r)["msisdn"]
 
-	if !s.store.ValidateMsisdnLen(msisdn) {
+	if !validateMsisdnLen(msisdn) {
 		w.WriteHeader(http.StatusBadRequest)
 		_ = json.NewEncoder(w).Encode(response{ErrorID: 2, ErrorMsg: "Not supported msisdn format: " + msisdn})
 		return
 	}
 
-	if cc, ok := s.store.ValidateCC(msisdn); !ok {
+	if cc, ok := validateCC(msisdn); !ok {
 		w.WriteHeader(http.StatusBadRequest)
 		_ = json.NewEncoder(w).Encode(response{ErrorID: 3, ErrorMsg: "Not supported cc: " + cc})
 		return
 	}
 
-	if ndc, ok := s.store.ValidateNDC(msisdn); !ok {
+	if ndc, ok := validateNDC(msisdn, s.config.NDCS); !ok {
 		w.WriteHeader(http.StatusBadRequest)
 		_ = json.NewEncoder(w).Encode(response{ErrorID: 4, ErrorMsg: "Not supported ndc: " + ndc})
 		return

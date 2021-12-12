@@ -6,19 +6,23 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/yykhomenko/hashes/internal/config"
 )
 
 const (
-	number   = 500000001
-	hash     = "89c664c54118ca2b4e803a6fc58f670d"
-	salt     = "mySalt"
-	capacity = 1000000
+	number = 500000001
+	hash   = "89c664c54118ca2b4e803a6fc58f670d"
 )
 
-var ndcs = []int{67}
+var testConfig = &config.Config{
+	NDCS:   []int{50},
+	NDCCap: 10000000,
+	Salt:   "mySalt",
+}
 
 func TestHash(t *testing.T) {
-	s := New(ndcs, capacity, salt)
+
+	s := New(testConfig)
 
 	expected := hash
 	actual := s.Hash(strconv.Itoa(number))
@@ -27,7 +31,7 @@ func TestHash(t *testing.T) {
 }
 
 func TestMsisdn(t *testing.T) {
-	s := New(ndcs, capacity, salt)
+	s := New(testConfig)
 	s.AddHash(number)
 
 	expected := strconv.Itoa(number)
@@ -37,7 +41,7 @@ func TestMsisdn(t *testing.T) {
 }
 
 func BenchmarkHash(b *testing.B) {
-	s := New(ndcs, capacity, salt)
+	s := New(testConfig)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		s.Hash(strconv.Itoa(number))

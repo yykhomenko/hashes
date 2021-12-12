@@ -1,24 +1,24 @@
-package store
+package server
 
 import (
 	"log"
 	"strconv"
 )
 
-func (s *Store) ValidateMsisdnLen(msisdn string) bool {
+func validateMsisdnLen(msisdn string) bool {
 	l := len(msisdn)
 	return 12 <= l && l <= 21
 }
 
 var ccs = map[string]int{"380": 380}
 
-func (s *Store) ValidateCC(msisdn string) (string, bool) {
+func validateCC(msisdn string) (string, bool) {
 	cc := msisdn[:3]
 	_, ok := ccs[cc]
 	return cc, ok
 }
 
-func (s *Store) ValidateNDC(msisdn string) (string, bool) {
+func validateNDC(msisdn string, ndcs []int) (string, bool) {
 	ndcStr := msisdn[3:5]
 
 	ndc, err := strconv.Atoi(ndcStr)
@@ -26,7 +26,7 @@ func (s *Store) ValidateNDC(msisdn string) (string, bool) {
 		log.Println(err)
 	}
 
-	for _, n := range s.ndcs {
+	for _, n := range ndcs {
 		if ndc == n {
 			return ndcStr, true
 		}

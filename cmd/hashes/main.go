@@ -5,8 +5,8 @@ import (
 
 	"github.com/caarlos0/env"
 
-	"github.com/cbi-sh/hashes/internal/hashes/server"
-	"github.com/cbi-sh/hashes/internal/hashes/store"
+	"github.com/yykhomenko/hashes/internal/hashes/server"
+	"github.com/yykhomenko/hashes/internal/hashes/store"
 )
 
 type Config struct {

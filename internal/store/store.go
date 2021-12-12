@@ -25,15 +25,13 @@ func New(config *config.Config) *Store {
 	}
 }
 
-func (s *Store) Generate() *Store {
+func (s *Store) Generate() {
 	log.Printf("generate %d hashes...", len(s.config.NDCS)*s.config.NDCCap)
 	defer timeTrack(time.Now(), "generate")
 
 	for _, ndc := range s.config.NDCS {
 		s.generate(ndc)
 	}
-
-	return s
 }
 
 func (s *Store) generate(ndc int) {

@@ -1,6 +1,6 @@
 package server
 
-type Counter struct {
+type counter struct {
 	hashes  uint64
 	msisdns uint64
 }

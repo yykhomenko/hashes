@@ -1,2 +1,3 @@
-.idea
-hashes
+.idea/
+.vscode/
+/hashes

@@ -6,7 +6,7 @@ IMG    := ${REPO}:${TAG}
 LATEST := ${REPO}:latest
 
 build: ## Build a version
-	GOOS=linux GOARCH=amd64 go build -v ./cmd/${NAME}
+	go build -v ./cmd/${NAME}
 
 lint: ## Run linters
 	golangci-lint run --no-config --issues-exit-code=0 --deadline=30m \

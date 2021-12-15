@@ -6,7 +6,7 @@ IMG    := ${REPO}:${TAG}
 LATEST := ${REPO}:latest
 
 build: ## Build a version
-	GOOS=linux GOARCH=amd64 go build -v ./cmd/...
+	GOOS=linux GOARCH=amd64 go build -v ./cmd/${NAME}
 
 lint: ## Run linters
 	golangci-lint run --no-config --issues-exit-code=0 --deadline=30m \
@@ -16,6 +16,14 @@ lint: ## Run linters
 
 test:	## Run all the tests
 	go test -v -race -timeout 30s ./...
+
+run: ## Run a version
+	go run ./cmd/${NAME}
+
+install: ## Install a version
+	make build
+	make test
+	go install -v ./cmd/${NAME}
 
 image: ## Build an image
 	docker build -t ${IMG} -t ${LATEST} .

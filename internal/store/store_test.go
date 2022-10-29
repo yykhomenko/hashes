@@ -16,42 +16,47 @@ const (
 
 var testConfig = &config.Config{
 	NDCS:   []int{50},
-	NDCCap: 10000000,
+	NDCCap: 1000000,
 	Salt:   "mySalt",
 }
 
-func TestHash(t *testing.T) {
-
+func TestStore_Hash(t *testing.T) {
 	s := New(testConfig)
-
 	expected := hash
 	actual := s.Hash(strconv.Itoa(number))
-
 	assert.Equal(t, expected, actual)
 }
 
-func TestMsisdn(t *testing.T) {
+func TestStore_Msisdn(t *testing.T) {
 	s := New(testConfig)
 	s.AddHash(number)
-
 	expected := strconv.Itoa(number)
 	actual, _ := s.Msisdn(hash)
-
 	assert.Equal(t, expected, actual)
-}
-
-func BenchmarkHash(b *testing.B) {
-	s := New(testConfig)
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		s.Hash(strconv.Itoa(number))
-	}
 }
 
 func BenchmarkMD5(b *testing.B) {
-	s := []byte("57149cb6-991c-4ffd-9c9")
+	n := []byte(strconv.Itoa(number))
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		md5.Sum(s)
+		md5.Sum(n)
+	}
+}
+
+func BenchmarkStore_Hash(b *testing.B) {
+	s := New(testConfig)
+	n := strconv.Itoa(number)
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		s.Hash(n)
+	}
+}
+
+func BenchmarkStore_Msisdn(b *testing.B) {
+	s := New(testConfig)
+	s.AddHash(number)
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		s.Msisdn(hash)
 	}
 }

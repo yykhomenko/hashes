@@ -5,8 +5,8 @@ TAG    := $(shell git log -1 --pretty=format:"%h")
 IMG    := ${REPO}:${TAG}
 LATEST := ${REPO}:latest
 
-build: ## Build a version
-	go build -v ./cmd/${NAME}
+build: ## Build version
+	go build ./cmd/${NAME}
 
 lint: ## Run linters
 	golangci-lint run --no-config --issues-exit-code=0 --deadline=30m \
@@ -14,21 +14,30 @@ lint: ## Run linters
     --enable=structcheck --enable=maligned --enable=errcheck --enable=dupl --enable=ineffassign \
     --enable=interfacer --enable=unconvert --enable=goconst --enable=gosec --enable=megacheck
 
-test:	## Run all the tests
-	go test -v -race -timeout 30s ./...
+test:	## Run tests
+	go test -race -timeout 30s ./...
 
-run: ## Run a version
+bench: ## Run benchmarks
+	go test ./... -bench=. -benchmem
+
+run: ## Build and start version
 	go run ./cmd/${NAME}
 
-install: ## Install a version
+start: ## Start version
+	./cmd/${NAME}
+
+clean: ## Clean project
+	rm -f ${NAME}
+
+install: ## Install version
 	make build
 	make test
-	go install -v ./cmd/${NAME}
+	go install ./cmd/${NAME}
 
-image: ## Build an image
+image: ## Build image
 	docker build -t ${IMG} -t ${LATEST} .
 
-publish: ## Publish an image
+publish: ## Publish image
 	docker push ${IMG}
 	docker push ${LATEST}
 
@@ -39,8 +48,9 @@ deploy: ## Deploy to k8s cluster
 undeploy: ## Undeploy from k8s cluster
 	kubectl delete -f deployments
 
-show: ## Show a service
+show: ## Show service
 	minikube service hashes-service
 
 help:
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-17s\033[0m %s\n", $$1, $$2}'
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
+  awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-17s\033[0m %s\n", $$1, $$2}'

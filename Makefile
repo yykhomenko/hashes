@@ -23,7 +23,7 @@ test:	## Run tests
 bench: ## Run benchmarks
 	go test ./... -bench=. -benchmem
 
-build: ## Build application
+build: ## Build version
 	go build ./cmd/${NAME}
 
 run: ## Build and start version
@@ -43,9 +43,12 @@ install: ## Install version
 image: ## Build image
 	docker build -t ${TAG} -t ${LATEST} .
 
-publish: ## Publish image
-	docker push ${TAG}
+push: ## Push image
+	docker push ${VERSION} && \
 	docker push ${LATEST}
+
+pull: ## Pull image
+	docker pull ${LATEST}
 
 deploy: ## Deploy to k8s cluster
 	kubectl apply -f deployments/hashes-namespace.yml

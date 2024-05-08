@@ -35,14 +35,14 @@ func (s *Store) Generate() {
 }
 
 func (s *Store) generate(ndc int) {
-	min := ndc*s.config.NDCCap + 0
-	max := ndc*s.config.NDCCap + s.config.NDCCap - 1
+	minNum := ndc*s.config.NDCCap + 0
+	maxNum := ndc*s.config.NDCCap + s.config.NDCCap - 1
 
 	var workers = runtime.GOMAXPROCS(-1)
 	numbers := make(chan int, 10*workers)
 	go func() {
 		defer close(numbers)
-		for number := min; number <= max; number++ {
+		for number := minNum; number <= maxNum; number++ {
 			numbers <- number
 		}
 	}()

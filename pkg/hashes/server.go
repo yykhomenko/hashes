@@ -81,15 +81,15 @@ func (s *Server) getHashes() func(c *fiber.Ctx) error {
 		msisdn := c.Params("msisdn")
 
 		if !validateMsisdnLen(msisdn, s.config.MsisdnLenMin, s.config.MsisdnLenMax) {
-			return c.Status(fiber.StatusBadRequest).JSON(response{ErrorID: 1, ErrorMsg: "Not supported MSISDN format: " + msisdn})
+			return c.Status(fiber.StatusBadRequest).JSON(response{ErrorID: 2, ErrorMsg: "Not supported MSISDN format: " + msisdn})
 		}
 
 		if cc, ok := validateCC(msisdn, s.config.CC); !ok {
-			return c.Status(fiber.StatusBadRequest).JSON(response{ErrorID: 2, ErrorMsg: "Not supported CC: " + cc})
+			return c.Status(fiber.StatusBadRequest).JSON(response{ErrorID: 3, ErrorMsg: "Not supported CC: " + cc})
 		}
 
 		if ndc, ok := validateNDC(msisdn, s.config.NDCS); !ok {
-			return c.Status(fiber.StatusBadRequest).JSON(response{ErrorID: 3, ErrorMsg: "Not supported NDC: " + ndc})
+			return c.Status(fiber.StatusBadRequest).JSON(response{ErrorID: 4, ErrorMsg: "Not supported NDC: " + ndc})
 		}
 
 		return c.Status(fiber.StatusOK).JSON(response{Value: s.store.Hash(msisdn[3:])})

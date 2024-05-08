@@ -35,30 +35,15 @@ start: ## Start version
 clean: ## Clean project
 	rm -f ${NAME}
 
-install: ## Install version
-	make build
-	make test
-	go install ./cmd/${NAME}
-
 image: ## Build image
 	docker build -t ${TAG} -t ${LATEST} .
-
-push: ## Push image
-	docker push ${VERSION} && \
-	docker push ${LATEST}
 
 pull: ## Pull image
 	docker pull ${LATEST}
 
-deploy: ## Deploy to k8s cluster
-	kubectl apply -f deployments/hashes-namespace.yml
-	kubectl apply -f deployments
-
-undeploy: ## Undeploy from k8s cluster
-	kubectl delete -f deployments
-
-show: ## Show service
-	minikube service hashes-service
+push: ## Push image
+	docker push ${VERSION} && \
+	docker push ${LATEST}
 
 help:
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / \

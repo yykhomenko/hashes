@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: hashes-configmap
-  namespace: hashes
-data:
-  HASHES_NDCS: "67"
-  HASHES_NDC_CAPACITY: "100000"

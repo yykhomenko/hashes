@@ -7,7 +7,7 @@ LATEST := ${REPO}:latest
 include .env
 export
 
-update:## Update dependencies
+update: ## Update dependencies
 	go get -u ./...
 	go mod tidy
 

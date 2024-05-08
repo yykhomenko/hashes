@@ -95,11 +95,10 @@ func validateMsisdnLen(msisdn string, min, max int) bool {
 
 func validateCC(msisdn, confCC string) (string, bool) {
 	cc := msisdn[:3]
-	if cc == confCC {
-		return cc, true
-	} else {
+	if cc != confCC {
 		return cc, false
 	}
+	return cc, true
 }
 
 func validateNDC(msisdn string, ndcs []int) (string, bool) {

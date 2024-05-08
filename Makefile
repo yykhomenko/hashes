@@ -34,6 +34,7 @@ start: ## Start version
 
 clean: ## Clean project
 	rm -f ${NAME}
+	find . -name '.DS_Store' -type f -delete
 
 image: ## Build image
 	docker build -t ${TAG} -t ${LATEST} .

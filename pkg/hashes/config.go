@@ -12,7 +12,7 @@ type Config struct {
 	NDCCap       int    `env:"HASHES_NDC_CAPACITY" envDefault:"10000000"`
 	Salt         string `env:"HASHES_SALT" envDefault:"mySalt"`
 	MsisdnLenMin int    `env:"HASHES_MSISDN_LENGTH_MIN" envDefault:"12"`
-	MsisdnLenMax int    `env:"HASHES_MSISDN_LENGTH_MIN" envDefault:"21"`
+	MsisdnLenMax int    `env:"HASHES_MSISDN_LENGTH_MAX" envDefault:"21"`
 }
 
 func NewConfig() *Config {

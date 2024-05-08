@@ -6,8 +6,8 @@ import (
 )
 
 type Config struct {
-	Addr         string `env:"HASHES_ADDR" envSeparator:"," envDefault:":8080"`
-	CC           string `env:"HASHES_CC" envSeparator:"," envDefault:"380"`
+	Addr         string `env:"HASHES_ADDR" envDefault:":8080"`
+	CC           string `env:"HASHES_CC" envDefault:"380"`
 	NDCS         []int  `env:"HASHES_NDCS" envSeparator:"," envDefault:"50"`
 	NDCCap       int    `env:"HASHES_NDC_CAPACITY" envDefault:"10000000"`
 	Salt         string `env:"HASHES_SALT" envDefault:"mySalt"`

@@ -8,8 +8,10 @@ import (
 
 func main() {
 	config := config.New()
+
 	store := store.New(config)
 	store.Generate()
+
 	server := server.New(config, store)
 	server.Start()
 }

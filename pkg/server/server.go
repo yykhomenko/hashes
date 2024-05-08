@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/yykhomenko/hashes/internal/config"
-	"github.com/yykhomenko/hashes/internal/store"
+	"github.com/yykhomenko/hashes/pkg/config"
+	"github.com/yykhomenko/hashes/pkg/store"
 )
 
 type counter struct {

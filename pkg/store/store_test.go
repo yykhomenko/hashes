@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/yykhomenko/hashes/internal/config"
+	"github.com/yykhomenko/hashes/pkg/config"
 )
 
 const (

@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/yykhomenko/hashes/internal/config"
-	"github.com/yykhomenko/hashes/internal/server"
-	"github.com/yykhomenko/hashes/internal/store"
+	"github.com/yykhomenko/hashes/pkg/config"
+	"github.com/yykhomenko/hashes/pkg/server"
+	"github.com/yykhomenko/hashes/pkg/store"
 )
 
 func main() {

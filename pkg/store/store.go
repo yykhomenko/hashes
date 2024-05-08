@@ -9,7 +9,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/yykhomenko/hashes/internal/config"
+	"github.com/yykhomenko/hashes/pkg/config"
 )
 
 type Store struct {

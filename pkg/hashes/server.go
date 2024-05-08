@@ -1,18 +1,16 @@
-package server
+package hashes
 
 import (
 	"fmt"
 	"github.com/gofiber/fiber/v2"
-	"github.com/yykhomenko/hashes/pkg/config"
-	"github.com/yykhomenko/hashes/pkg/store"
 	"log"
 	"strconv"
 	"sync/atomic"
 )
 
 type Server struct {
-	config  *config.Config
-	store   *store.Store
+	config  *Config
+	store   *Store
 	counter *counter
 }
 
@@ -27,7 +25,7 @@ type response struct {
 	ErrorMsg string `json:"errorMsg,omitempty"`
 }
 
-func New(c *config.Config, s *store.Store) *Server {
+func NewServer(c *Config, s *Store) *Server {
 	return &Server{
 		config:  c,
 		store:   s,
@@ -37,24 +35,48 @@ func New(c *config.Config, s *store.Store) *Server {
 
 func (s *Server) Start() {
 	log.Println("http-server listening...")
+	app := fiber.New(fiber.Config{DisableStartupMessage: true})
 
-	app := fiber.New(fiber.Config{
-		DisableStartupMessage: true,
-	})
+	app.Get("/", s.getRoot())
+	app.Get("/metrics", s.getMetrics())
+	app.Get("/hashes/:msisdn", s.getHashes())
+	app.Get("/msisdns/:hash", s.getMsisdns())
 
-	app.Get("/", func(c *fiber.Ctx) error {
+	log.Fatal(app.Listen(s.config.Addr))
+}
+
+func (s *Server) getRoot() func(c *fiber.Ctx) error {
+	return func(c *fiber.Ctx) error {
 		return c.SendStatus(fiber.StatusOK)
-	})
+	}
+}
 
-	app.Get("/metrics", func(c *fiber.Ctx) error {
+func (s *Server) getMetrics() func(c *fiber.Ctx) error {
+	return func(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusOK).SendString(fmt.Sprintf(
 			"hashes_total %d\nmsisdns_total %d\n",
 			s.counter.hashes,
 			s.counter.msisdns,
 		))
-	})
+	}
+}
 
-	app.Get("/hashes/:msisdn", func(c *fiber.Ctx) error {
+func (s *Server) getMsisdns() func(c *fiber.Ctx) error {
+	return func(c *fiber.Ctx) error {
+		atomic.AddUint64(&s.counter.msisdns, 1)
+		hash := c.Params("hash")
+		msisdn, exists := s.store.Msisdn(hash)
+
+		if !exists {
+			return c.Status(fiber.StatusNotFound).JSON(response{ErrorID: 1, ErrorMsg: "Not found"})
+		}
+
+		return c.Status(fiber.StatusOK).JSON(response{Value: s.config.CC + msisdn})
+	}
+}
+
+func (s *Server) getHashes() func(c *fiber.Ctx) error {
+	return func(c *fiber.Ctx) error {
 		atomic.AddUint64(&s.counter.hashes, 1)
 		msisdn := c.Params("msisdn")
 
@@ -71,21 +93,7 @@ func (s *Server) Start() {
 		}
 
 		return c.Status(fiber.StatusOK).JSON(response{Value: s.store.Hash(msisdn[3:])})
-	})
-
-	app.Get("/msisdns/:hash", func(c *fiber.Ctx) error {
-		atomic.AddUint64(&s.counter.msisdns, 1)
-		hash := c.Params("hash")
-		msisdn, exists := s.store.Msisdn(hash)
-
-		if !exists {
-			return c.Status(fiber.StatusNotFound).JSON(response{ErrorID: 1, ErrorMsg: "Not found"})
-		}
-
-		return c.Status(fiber.StatusOK).JSON(response{Value: s.config.CC + msisdn})
-	})
-
-	log.Fatal(app.Listen(s.config.Addr))
+	}
 }
 
 func validateMsisdnLen(msisdn string, min, max int) bool {

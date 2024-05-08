@@ -1,4 +1,4 @@
-package store
+package hashes
 
 import (
 	"crypto/md5"
@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/yykhomenko/hashes/pkg/config"
 )
 
 const (
@@ -14,21 +13,21 @@ const (
 	hash   = "89c664c54118ca2b4e803a6fc58f670d"
 )
 
-var testConfig = &config.Config{
+var testConfig = &Config{
 	NDCS:   []int{50},
 	NDCCap: 1000000,
 	Salt:   "mySalt",
 }
 
 func TestStore_Hash(t *testing.T) {
-	s := New(testConfig)
+	s := NewStore(testConfig)
 	expected := hash
 	actual := s.Hash(strconv.Itoa(number))
 	assert.Equal(t, expected, actual)
 }
 
 func TestStore_Msisdn(t *testing.T) {
-	s := New(testConfig)
+	s := NewStore(testConfig)
 	s.AddHash(number)
 	expected := strconv.Itoa(number)
 	actual, _ := s.Msisdn(hash)
@@ -44,7 +43,7 @@ func BenchmarkMD5(b *testing.B) {
 }
 
 func BenchmarkStore_Hash(b *testing.B) {
-	s := New(testConfig)
+	s := NewStore(testConfig)
 	n := strconv.Itoa(number)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -53,7 +52,7 @@ func BenchmarkStore_Hash(b *testing.B) {
 }
 
 func BenchmarkStore_Msisdn(b *testing.B) {
-	s := New(testConfig)
+	s := NewStore(testConfig)
 	s.AddHash(number)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {

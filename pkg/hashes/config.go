@@ -1,4 +1,4 @@
-package config
+package hashes
 
 import (
 	"github.com/caarlos0/env/v11"
@@ -15,7 +15,7 @@ type Config struct {
 	MsisdnLenMax int    `env:"HASHES_MSISDN_LENGTH_MIN" envDefault:"21"`
 }
 
-func New() *Config {
+func NewConfig() *Config {
 	c := Config{}
 	if err := env.Parse(&c); err != nil {
 		log.Fatal(err)

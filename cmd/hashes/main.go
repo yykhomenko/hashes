@@ -1,17 +1,17 @@
 package main
 
 import (
-	"github.com/yykhomenko/hashes/pkg/config"
-	"github.com/yykhomenko/hashes/pkg/server"
-	"github.com/yykhomenko/hashes/pkg/store"
+	"github.com/yykhomenko/hashes/pkg/hashes"
+	"log"
 )
 
 func main() {
-	config := config.New()
+	log.SetFlags(log.LstdFlags | log.Lmicroseconds)
+	config := hashes.NewConfig()
 
-	store := store.New(config)
+	store := hashes.NewStore(config)
 	store.Generate()
 
-	server := server.New(config, store)
+	server := hashes.NewServer(config, store)
 	server.Start()
 }

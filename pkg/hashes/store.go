@@ -1,4 +1,4 @@
-package store
+package hashes
 
 import (
 	"crypto/md5"
@@ -8,17 +8,15 @@ import (
 	"strconv"
 	"sync"
 	"time"
-
-	"github.com/yykhomenko/hashes/pkg/config"
 )
 
 type Store struct {
-	config *config.Config
+	config *Config
 	sync.RWMutex
 	msisdns map[[16]byte]uint32
 }
 
-func New(config *config.Config) *Store {
+func NewStore(config *Config) *Store {
 	return &Store{
 		config:  config,
 		msisdns: make(map[[16]byte]uint32, len(config.NDCS)*config.NDCCap),

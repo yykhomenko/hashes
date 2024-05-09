@@ -1,3 +1,11 @@
+High-throughput hashing system for converting subscriber numbers to hash and vice versa
+
+```json
+{
+  "value": "b138279614a187718eeef39ac198e95f"
+}
+```
+
 ```
 ./wrkb hashes http://127.0.0.1:8080/hashes/380671234567                                                                                                 [18:24:28]
 
@@ -28,6 +36,12 @@ disk: 5.9 MB
 └────┴───────┴─────────┴─────┴────┴───────┘
 
 Best: 9, rps: 212890, latency: 31µs
+```
+
+```json
+{
+  "value": "380671234567"
+}
 ```
 
 ```

@@ -21,8 +21,8 @@ type counter struct {
 
 type response struct {
 	Value    string `json:"value,omitempty"`
-	ErrorID  byte   `json:"errorID,omitempty"`
-	ErrorMsg string `json:"errorMsg,omitempty"`
+	ErrorID  byte   `json:"error_id,omitempty"`
+	ErrorMsg string `json:"error_msg,omitempty"`
 }
 
 func NewServer(c *Config, s *Store) *Server {

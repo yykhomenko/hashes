@@ -1,0 +1,8 @@
+services:
+  hashes:
+    image: yykhomenko/hashes:latest
+    env_file:
+      - ./.env
+    ports:
+      - "9000:8080"
+    restart: unless-stopped

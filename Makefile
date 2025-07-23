@@ -43,7 +43,7 @@ pull: ## Pull image
 	docker pull ${LATEST}
 
 push: ## Push image
-	docker push ${VERSION} && \
+	docker push ${TAG} && \
 	docker push ${LATEST}
 
 help:

@@ -1,12 +1,13 @@
 package hashes
 
 import (
-	"github.com/caarlos0/env/v11"
 	"log"
+
+	"github.com/caarlos0/env/v11"
 )
 
 type Config struct {
-	Addr         string `env:"HASHES_ADDR" envDefault:":8080"`
+	Addr         string `env:"HASHES_ADDR" envDefault:":8082"`
 	CC           string `env:"HASHES_CC" envDefault:"380"`
 	NDCS         []int  `env:"HASHES_NDCS" envSeparator:"," envDefault:"67"`
 	NDCCap       int    `env:"HASHES_NDC_CAPACITY" envDefault:"10000000"`

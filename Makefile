@@ -57,6 +57,9 @@ status: ## Print containers status
 log: ## Print log
 	docker compose logs -f
 
+run_port_forwarding:
+	kubectl port-forward svc/hashes 8080:80
+
 help:
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / \
   {printf "\033[36m%-16s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)

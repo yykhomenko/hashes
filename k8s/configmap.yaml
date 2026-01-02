@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hashes-config
+  labels:
+    app: hashes
+data:
+  HASHES_ADDR: ":8080"
+  HASHES_CC: "380"
+  HASHES_NDCS: "67"
+  HASHES_NDC_CAPACITY: "10000000"
+  HASHES_SALT: "mySalt"
+  HASHES_MSISDN_LENGTH_MIN: "12"
+  HASHES_MSISDN_LENGTH_MAX: "21"

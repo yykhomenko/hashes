@@ -20,6 +20,9 @@ lint: ## Run linters
 test:	## Run tests
 	go test -race -timeout 30s ./...
 
+build:
+	go build -o hashes ./cmd/hashes
+
 bench: ## Run benchmarks
 	go test ./... -bench=. -benchmem
 
